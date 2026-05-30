@@ -17,6 +17,15 @@ const transporter = createTransport({
   },
 });
 
+app.get("/", async (req, res) => {
+  try {
+    await transporter.verify();
+    res.json({ success: true, message: "SMTP connection is working!" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.post("/send-email", async (req, res) => {
   const { name, email, phone, message } = req.body;
 
