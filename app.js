@@ -19,13 +19,6 @@ const transporter = createTransport({
 
 app.get("/", async (req, res) => {
   try {
-    if (
-      process.env.EMAIL_USER ||
-      process.env.EMAIL_PASS ||
-      process.env.EMAIL_REC
-    ) {
-      res.status(500).json({ success: false, error: "no credentials" });
-    }
     await transporter.verify();
     res.json({ success: true, message: "SMTP connection is working!" });
   } catch (error) {
