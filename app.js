@@ -2,19 +2,29 @@ import express, { json } from "express";
 import { createTransport } from "nodemailer";
 import { config } from "dotenv";
 
-config();
+config({
+  override: true,
+});
 
 const app = express();
 app.use(json());
 
 const transporter = createTransport({
   host: "mail.privateemail.com",
-  port: 2525,
+  port: 465,
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+});
+
+app.get("/env-check", (req, res) => {
+  res.json({
+    EMAIL_USER: !!process.env.EMAIL_USER,
+    EMAIL_PASS: !!process.env.EMAIL_PASS,
+    EMAIL_REC: !!process.env.EMAIL_REC,
+  });
 });
 
 app.get("/", async (req, res) => {
